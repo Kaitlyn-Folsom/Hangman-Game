@@ -1,0 +1,50 @@
+
+h1{
+	text-align: center;
+	font-size:40px;
+	margin: 20px 0 20px 0;
+	font-weight:20px;
+	font: Georgia, sans-serif;
+
+}
+
+img{
+	width:500px;
+	height:auto;
+	margin: 0 0 30px 0;
+}
+
+h2{
+	text-align: center;
+	font-size:30px;
+}
+
+div{
+	width:400px;
+	height:100px;
+}
+
+h3{
+	text-align: center;
+	margin: 10px 0 10px 0;
+
+}
+
+table{
+text-align: center;
+}
+
+td{
+	padding:0px;
+}
+
+button{
+	margin:20px;
+	width:30px;
+	height:30px;
+}
+
+#country{
+	font-color:blue;
+	font-size:50px;
+}
