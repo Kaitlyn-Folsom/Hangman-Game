@@ -1,75 +1,114 @@
+//VARIABLES
 
-var words =["Argentina", "Australia", "Algeria", "Belgium", "Brazil",
-						"Cameroon", "Costa Rica", "Dominican Republic", "Ethiopia", 
-						"Finland", "Guatemala", "Greece", "Indonesia", "Kazakhstan", 
-						"South Korea", "Liechtenstein", "Madagascar", "Morocco", "Nicaragua", 
-						"Philippines", "Switzerland", "Tunisia", "Thailand", "Ukraine", 
-						"Venezuela", "Zimbabwe"];
+var words = ["argentina", "australia", "algeria", "belgium", "brazil",
+    "cameroon", "costa rica", "dominican republic", "ethiopia",
+    "finland", "guatemala", "greece", "indonesia", "kazakhstan",
+    "south korea", "liechtenstein", "madagascar", "morocco", "nicaragua",
+    "philippines", "switzerland", "tunisia", "thailand", "ukraine",
+    "venezuela", "zimbabwe"
+];
 
-	console.log(words);
+var randomWord = "";
+var lettersInRandomWord = [];
+var numBlanks = 0;
+var blankArray = [];
+var wrongGuesses = [];
 
-var answerArray = ["_", "_", "_", "_", "_", "_", "_", "_", ];
-var lettersGuessed = [];
-var guessesLeft = 8;
+var winCounter = 0;
+var lossCounter = 0;
+var guessesLeft = 9;
 
-var answerString;
+// FUNCTIONS 
+function startGame() {
 
-var chosenWord = words[Math.floor(Math.random() * words.length)];
+    guessesLeft = 9;
 
-	console.log(chosenWord);
+    randomWord = words[Math.floor(Math.random() * words.length)];
+
+    lettersInRandomWord = randomWord.split("");
+
+    numBlanks = lettersInRandomWord.length;
+
+    console.log(randomWord);
+
+    //reset guesses
+    blankArray = [];
+    wrongGuesses = [];
+
+    for (var i = 0; i < numBlanks; i++) {
+        blankArray.push("_");
+    }
+
+   		 console.log(blankArray);
+
+    document.getElementById("guesses-left").innerHTML = guessesLeft;
+
+    document.getElementById("word-blanks").innerHTML = blankArray.join(" ");
+
+    document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
+}
+
+function checkLetters(letter) {
+
+    var letterInWord = false;
+
+    for (var i = 0; i < numBlanks; i++) {
+        if (randomWord[i] === letter) {
+            letterInWord = true;
+        }
+    }
+
+    if (letterInWord) {
+        for (var j = 0; j < numBlanks; j++) {
+            if (randomWord[j] === letter) {
+                blankArray[j] = letter;
+            }
+        }
+
+        console.log(blankArray);
+    }
+    else {
+        wrongGuesses.push(letter);
+        guessesLeft--;
+    }
+}
+
+function roundComplete() {
+
+    console.log("WinCount: " + winCounter + " | LossCount: " + lossCounter + " | NumGuesses: " + guessesLeft);
+
+    document.getElementById("guesses-left").innerHTML = guessesLeft;
+
+    document.getElementById("word-blanks").innerHTML = blankArray.join(" ");
+
+    document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
+
+    if (lettersInRandomWord.toString() === blankArray.toString()) {
+        winCounter++;
+        alert("You win!");
+
+        document.getElementById("wins").innerHTML = winCounter;
+        startGame();
+    }
+    else if (guessesLeft === 0) {
+        lossCounter++;
+        alert("You lose");
+
+        document.getElementById("losses").innerHTML = lossCounter;
+        // Restart the game.
+        startGame();
+    }
+}
+
+// MAIN PROCESS
+
+startGame();
 
 document.onkeyup = function(event) {
 
-	var userGuess = event.key;
+    var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
 
-	console.log(userGuess);
-	
+    checkLetters(letterGuessed);
 
-	(function () {
-		for (var j = 0; j < chosenWord.length; j++) {
-		if (chosenWord[j] === userGuess) {
- 			answerArray[j] = userGuess;
- 		}
-	}
-	answerString = answerArray.join(' ');
-	console.log("answerString: ",answerString.length);
-	console.log('answerArray: ',answerArray.length);
-}());
-
-	if (lettersGuessed.indexOf(userGuess) < 0 && chosenWord.indexOf(userGuess) >= 0) {
-          lettersGuessed[lettersGuessed.length]=userGuess;
-          guessesLeft--;
-        }
-
-    if (chosenWord == userGuess) {
-          guessesLeft = 8;
-          guessesMade = [];
-          chosenWord = words[Math.floor(Math.random() * words.length)];
-         }
-
-    if (guessesLeft == 0) {
-          guessesLeft = 10;
-          guessesMade = [];
-          chosenWord = computerChoices[Math.floor(Math.random() * computerChoices.length)];
-        }
-
-	var targetDiv = document.getElementById("country");
-	targetDiv.innerHTML = answerString;
-    
-    var guessesMadeDisplay = document.getElementById("letters-guessed");
-        guessesMadeDisplay.innerHTML = lettersGuessed;
-
-    var guessesLeftDisplay = document.getElementById("remaining-guesses");
-        guessesLeftDisplay.innerHTML = guessesLeft;
-}	
-
-
-//
-    
-
-   
-
-
-
-
-
+    roundComplete();
+};
